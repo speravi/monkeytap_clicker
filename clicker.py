@@ -11,8 +11,6 @@ start_y = 415
 offset = 140
 tile_size = 10
 target_color = (209, 183, 28)
-# target_color = (146, 128, 20)
-
 
 # Overlay setup
 overlay_visible = False
@@ -23,21 +21,26 @@ overlay_canvas = None
 def click(x, y):
     win32api.SetCursorPos((x, y))
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0)
-    time.sleep(0.05)
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0)
-    time.sleep(0.05)
+    time.sleep(0.01)
 
 # Setup overlay window
 def init_overlay():
     global overlay_root, overlay_canvas
     overlay_root = tk.Tk()
-    overlay_root.title("Overlay")
     overlay_root.attributes('-topmost', True)
-    overlay_root.attributes('-alpha', 0.3)
     overlay_root.overrideredirect(True)
+    # how cool is this?? :DDD
+    overlay_root.configure(bg='magenta')  # Background color to make transparent
+    overlay_root.wm_attributes('-transparentcolor', 'magenta')  # Windows-only
+
     screen_width = overlay_root.winfo_screenwidth()
     screen_height = overlay_root.winfo_screenheight()
-    overlay_canvas = tk.Canvas(overlay_root, width=screen_width, height=screen_height, bg='black')
+
+    overlay_canvas = tk.Canvas(
+        overlay_root, width=screen_width, height=screen_height,
+        bg='magenta', highlightthickness=0
+    )
     overlay_canvas.pack()
 
     for row in range(4):
@@ -45,8 +48,8 @@ def init_overlay():
             x = start_x + col * offset
             y = start_y + row * offset
             overlay_canvas.create_rectangle(
-                x, y, x + tile_size, y + tile_size,
-                outline='red', width=2
+                x-10, y-10, x + tile_size, y + tile_size,
+                outline='red', width=1
             )
 
     overlay_root.withdraw()  # Start hidden
