@@ -93,8 +93,8 @@ try:
                         pixel = pyautogui.pixel(x, y)
                         if pixel == target_color:
                             click(x, y)
-                    except Exception:
-                        pass  # In case window moves or monitor changes
+                    except Exception as e:
+                        print(f"Pixel read failed at ({x}, {y}): {e}")
         else:
             time.sleep(0.05)
 except KeyboardInterrupt:
